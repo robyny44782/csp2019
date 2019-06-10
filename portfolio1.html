@@ -70,3 +70,56 @@ body, html {
 <img src="images/graph.PNG" height="250">
 <p><font color=purple> This is our graph about the number of girls and boys in schools. </p>
 <br>
+
+
+<textarea rows="20" cols="100">
+  turtles-own [
+  moves         ;; how many sides the turtles has drawn so far
+  star-side     ;; The length of the side that the turtle is drawing
+  generation    ;; How many generations of turtles have come before it.  So,
+]               ;; if the turtle was hatched from a turtle that was hatched
+                ;; by another turtle, it's generation is 2
+
+to setup
+  clear-all
+  create-turtles 1 [
+    set size 8                    ;; so turtles are easy to see
+    set ycor max-pycor * 0.9      ;; place near top of world
+    set star-side ycor * 1.97538  ;; length of the sides of the star it will draw
+    pen-down
+    set heading 180 + 18
+    recolor
+  ]
+  reset-ticks
+end
+
+to go
+  if not any? turtles [ stop ]
+  ask turtles [
+    fd star-side
+    rt 180 + 36
+    if generation < fractal-level [      ;; If it's not drawing at the deepest level of the figure,
+      hatch 1 [                          ;;  hatch a new turtle to draw at a lower level
+        set generation generation + 1
+        set star-side star-side / 2
+        recolor
+        set moves 0
+        rt 0
+      ]
+    ]
+    set moves moves + 1
+    if moves > 5 [ die ]        ;; When the turtle has completed its star, it's done
+  ]
+  tick
+end
+
+to recolor  ;; turtle procedure
+  set color scale-color yellow (fractal-level - generation) -1 (fractal-level + 1)
+end
+
+
+; Copyright 1999 Uri Wilensky.
+; See Info tab for full copyright and license.
+</textarea>
+<img src="images/star.PNG" height="250">
+
